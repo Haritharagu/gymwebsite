@@ -81,6 +81,8 @@ animate();
 
 // GSAP Animations
 document.addEventListener('DOMContentLoaded', () => {
+    gsap.registerPlugin(ScrollTrigger);
+
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
     tl.from('nav', {
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         opacity: 0,
         duration: 1.5
     })
-        .from('h1', {
+        .from('.hero-left h1', {
             y: 100,
             opacity: 0,
             duration: 2,
@@ -104,6 +106,39 @@ document.addEventListener('DOMContentLoaded', () => {
             opacity: 0,
             duration: 1
         }, "-=1");
+
+    // Stat Counter Animation
+    const stats = document.querySelectorAll('.stat-num');
+    stats.forEach(stat => {
+        const val = parseInt(stat.getAttribute('data-val'));
+        gsap.to(stat, {
+            scrollTrigger: {
+                trigger: stat,
+                start: "top 90%",
+            },
+            innerHTML: val,
+            duration: 2,
+            snap: { innerHTML: 1 },
+            onUpdate: function () {
+                // Formatting for large numbers if needed
+            }
+        });
+    });
+
+    // Reveal animations for sections
+    const revealElements = document.querySelectorAll('.reveal-text, .section-title, .program-card, .coach-card');
+    revealElements.forEach(el => {
+        gsap.from(el, {
+            scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1.2,
+            ease: "power3.out"
+        });
+    });
 });
 
 // Window Resize Handling
